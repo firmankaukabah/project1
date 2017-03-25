@@ -1,0 +1,463 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+  <title>WISATA MADURA</title> 
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="css/jquery.mobile-1.2.0.css" />
+  <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="css/leaflet.css" />
+   <link href="imgzoom.css" rel="stylesheet" type="text/css" />
+  <script src="js/jquery-1.8.2.min.js"></script>
+  <script src="js/jquery.mobile-1.2.0.min.js"></script>
+  <script type="text/javascript" src="cordova-2.6.0.js"></script>
+  <script type="text/javascript" src="js/leaflet.js"></script>
+  <script type="text/javascript">
+  //Wait for Cordova to load
+  //
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  // Cordova is ready
+  //
+  function onDeviceReady() {
+	    console.log('ready');
+  };
+  
+  var myMedia = null;
+  var mediaTimer = null;
+  var mediaState = 0;
+  function updateMedia(radioUrl) {
+  	if(myMedia != null) {
+  		myMedia.release();
+  	}
+//     	document.getElementById('audio_title').innerHTML = radioUrl;
+  	myMedia = new Media(radioUrl,
+  				function() { // success callback
+  					console.log("Media instance success.");
+  				},
+  				function() { // error callback
+  					console.log("Media error");
+  				},
+  				function(status) {
+  					///console.log("status: "+status);
+  					mediaState = status;
+  					if(status == Media.MEDIA_NONE) {
+  						console.log("MEDIA_NONE");
+  					} else if(status == Media.MEDIA_STARTING) {
+  						console.log("MEDIA_STARTING");
+  						$.mobile.loading( 'show', {
+  							text: 'buffering..',
+  							textVisible: true,
+  							theme: 'a',
+  							textonly: false,
+  							html: ''
+  					});
+//  				       	document.getElementById('audio_position').innerHTML = 'buffering';
+  						$('#play .ui-btn-text').text("P A U S E");
+  					} else if(status == Media.MEDIA_RUNNING) {
+  						console.log("MEDIA_RUNNING");
+  						$.mobile.loading( 'hide' );
+  						$('#play .ui-btn-text').text("P A U S E");
+  					} else if(status == Media.MEDIA_PAUSED) {
+  						console.log("MEDIA_PAUSED");
+  						$('#play .ui-btn-text').text("STREAM");
+  					} else if(status == Media.MEDIA_STOPPED) {
+  						console.log("MEDIA_STOPPED");
+//  				       	document.getElementById('audio_position').innerHTML = '<3';
+  						$('#play .ui-btn-text').text("STREAM");
+  					} else {
+  						console.log("MEDIA_UNKNOWN");
+  					}
+  				});
+  };
+  function playAudio() {
+  	if(mediaState != Media.MEDIA_STARTING && mediaState != Media.MEDIA_RUNNING) {
+  		myMedia.play();
+  		// Update myMedia position every second
+          if (mediaTimer == null) {
+              mediaTimer = setInterval(function() {
+                  // get myMedia position
+                  myMedia.getCurrentPosition(
+                      // success callback
+                      function(position) {
+                          if (mediaState == 2 && position > -1) {
+//                          	document.getElementById('audio_position').innerHTML = position + '/' + myMedia.getDuration() + ' secs.';
+                          }
+                      },
+                      // error callback
+                      function(e) {
+                          console.log("Error getting pos=" + e);
+//                      	document.getElementById('audio_position').innerHTML = "Error: " + e;
+                      }
+                  );
+              }, 1000);
+          }
+  	} else {
+  		myMedia.pause();
+  	}
+  };
+  
+	function BukaMaps() {
+		// camplong: -7.775019, 110.375551
+		var map = L.map('map').setView([-7.781019, 110.373551], 13);
+		// add an OpenStreetMap tile layer
+		//L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		//	maxZoom: 18
+		//	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		//}).addTo(map);
+		L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg',
+		{
+			attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+			subdomains: '1234',
+			maxZoom: 18
+		}).addTo(map);
+
+
+		
+		
+		var jumiangM  = L.marker([-7.234120, 113.542706]).addTo(map);
+		jumiangM.bindPopup('<b>Jumiang</b><br/><a href="#jumiang">Info</a>').openPopup();
+		
+		
+		var gililabekM = L.marker([-7.203907, 114.047588]).addTo(map);
+		gililabekM.bindPopup('<b>Gili Labek</b><br/><a href="#gililabek">Info</a>');
+		
+		var camplongM = L.marker([-7.218250, 113.319007]).addTo(map);
+		camplongM.bindPopup('<b>Camplong</b><br/><a href="#camplong">Info</a>')();
+		
+		
+		
+		
+		
+		
+	};
+  </script>
+</head> 
+<body> 
+
+
+<div data-role="page" id="main">
+
+	<div data-role="header" data-position="fixed">
+		<h1>WISATA MADURA</h1>
+	</div><!-- /header -->
+	
+<div class="column1">
+<div class="banner">
+<br/>
+<br/>
+        	<center><h2>WISATA MADURA</h2></center>
+        
+        </div>
+<!-------------------------kotak -->
+      <div id="templatemo_boxarea">
+        <div class="box1">
+		<div data-role="collapsible" data-theme="a" data-content-theme="d">
+			<h3>PANTAI GILI LABEK</h3>
+			<center><img src="images/gililabak1.jpg" height="120" width="200">
+		</div>
+          <div class="box1top">
+            <h2>Diskon 25%</h2>
+          </div>
+                <div class="body">
+                    Stat Locasion Pamekasan<br />
+                        <span class="price">Rp.200.000</span> per orang
+                        <ul>
+                            <li>Transport</li>
+                            <li>Makanan & Minum</li>
+                            <li>Tiket</li>                        
+                        </ul>
+                        <div class="readmore_black"><a href="#gililabek">Selengkapnya</a></div>
+				</div>
+                <div class="boxbottom">
+                	
+                </div>
+        </div>
+ <!----->          
+            <div class="box2">
+			<div data-role="collapsible" data-theme="a" data-content-theme="d">
+			<h3>PANTAI JUMIANG</h3>
+			<center><img src="images/jumiang2.jpg" height="120" width="200">
+		</div>
+              <div class="box2top"><h2>Diskon 10%</h2></div>
+                <div class="body">
+                     Stat Locasion Pamekasan <br />
+                        <span class="price">Rp.20.000</span> per orang
+                 		<ul>
+                            <li>Transport</li>
+                            <li>Makanan & Minum</li>
+                            <li>Tiket</li>                          
+                        </ul>
+                        <div class="readmore_black"><a href="#jumiang">Selengkapnya</a></div>
+				</div>
+                <div class="boxbottom"></div>
+        </div>
+<!--------------->           
+            <div class="box3">
+              <div data-role="collapsible" data-theme="a" data-content-theme="d">
+			<h3>PANTAI CAMPLONG</h3>
+				<center><img src="images/camplong3.jpg" height="120" width="200">
+		</div>
+        </div>
+		 <div class="box3">
+         <div class="box3top"><h2>Diskon 20%</h2></div>
+                <div class="body">
+                    Stat Locasion Pamekasan<br />
+                        <span class="price">Rp.50.000</span> per orang
+					<ul>
+                            <li>Transport</li>
+                            <li>Makanan & Minum</li>
+                            <li>Tiket</li>                        
+                  </ul>
+                        <div class="readmore_black"><a href="#camplong">Selanjutnya</a></div>
+				</div>
+                <div class="boxbottom"></div>
+        </div>
+		
+<!---------------> 
+        </div>
+		
+		
+		
+<!-------------------------kotak -->	
+	
+    
+          </div>
+	
+<div class="column2">
+            
+		<div data-role="content">	
+
+		<h1>Cari Lokasi Wisata</h1>
+		<p>untuk lebih leluas mencari gunakan menu maps lokasi</p>	
+		<ul data-role="listview" data-inset="true" data-filter="true">
+			<li data-role="list-divider">LIST DESTINASI WISATA</li>
+			<li><a href="#camplong">PANTAI CAMPLONG</a></li>
+			<li><a href="#gililabek">PANTAI GILI LABEK</a></li>
+			<li><a href="#jumiang">PANTAI JUMIANG</a></li>
+		</ul>	
+		<div data-role="collapsible" data-theme="a" data-content-theme="d">
+			<h3>Tentang</h3>
+			<center><img src="images/team.png" height="100" width="100">
+			<p>Peogram web ini dibuat untuk memenuhi tugas Pemograman Web <statis></p>
+		</div>
+	
+		
+		<div data-role="collapsible" data-theme="a" data-content-theme="d">
+			<h3>Contak Person</h3>
+			<center><a href="https://www.facebook.com/virman.wahyudi"><img src="images/fb.png" height="100" width="100"></a></center>
+			
+
+		</div>
+		
+	</div><!-- /content -->	
+				
+            </div>
+	
+
+
+	
+	
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#main" data-icon="grid" data-transition="flip" data-prefetch class="ui-btn-active ui-state-persist">MENU UTAMA</a></li>
+				<li><a href="#maps" data-icon="home" data-transition="flip" data-prefetch>PETA LOKASI</a></li>
+			</ul>
+		</div>
+	</div><!-- /footer -->
+</div><!-- /page main -->
+
+<div data-role="page" id="maps">
+
+
+
+	<div data-role="header" data-position="fixed">
+		<h1>PETA LOKASI</h1>
+	</div><!-- /header -->
+
+	<div data-role="content"> 
+		<div class="ui-body">
+			<center><h1>PETA</h1></center>
+			
+			<a href="#" data-role="button" onclick="BukaMaps();">Buka Peta</a>
+			<center><div id="map" style="width: 820px; height: 420px"></div></center>
+		</div><!-- /themed container -->
+	</div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#main" data-icon="grid" data-transition="flip" data-prefetch class="ui-btn-active ui-state-persist">MENU UTAMA</a></li>
+				<li><a href="#maps" data-icon="home" data-transition="flip" data-prefetch>PETA LOKASI</a></li>
+				
+			</ul>
+		</div>
+	</div>
+
+</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<div data-role="page" id="camplong">
+
+	<div data-role="header" data-position="fixed">
+		<a href="#main" data-role="button">Back</a>
+		<h1>PANTAI CAMPLONG</h1>
+	</div>
+<div class="column3">
+	<b><p><font size="5">Detail</font></p></b>
+	<br/>
+		<p><font size="3"><img src="js/images/marker-icon.png" height="20" width="13">-7.234120, 113.542706</font></p>
+		
+		<p><font size="3"><p>Desa : </font></p>
+		<p><font size="3">Kec  : </font></p>
+		<p><font size="3">Kab  : </font></p>
+		<p><font size="5">Komentar</font>
+		<textarea name ="alamat" cols="30" rows="5" ></textarea> <p></p>
+		<button>Kirim</button>
+		
+</div>
+<div class="column4">
+	<div data-role="content">
+		<h1>PANTAI CAMPLONG</h1>
+		<br/>
+		<div class="zoom">
+<img src="images/camplong1.jpg">
+<img src="images/camplong2.jpg">
+<img src="images/camplong3.jpg">
+</div> 
+<p>Pantai Camplong terletak di Kabupaten Sampang-Madura. Hanya butuh sekitar satu jam perjalanan dari Jembatan Suramadu yang menjadi Ikon baru pulau garam ini. Terletak di pinggir jalan utama membuat Camplong mudah ditemukan. Dengan hanya membayar Rp.2000,- untuk tiket dan Rp.2000,- untuk parkir anda sudah bisa menikmati Indahnya pantai camplong selama yang Anda inginkan.</p>	
+<p>Setelah melewati pintu masuk, Anda akan dituntun oleh jalan yang telah tersedia yang mengajak mata Anda agar tertuju ke Pantai di ujungnya. Jika Anda melihat ke kiri jalan, bisa terlihat para pedagang yang berjualan aneka jenis makanan dan minuman serta pernak-pernik yang beragam. 100 meter berjalan, Anda sudah sampai pada pemandangan pantai yang memanjakan mata. Jika Anda lelah karena perjalanan jauh, disana ada tempat duduk dan tempat berbaring. Ditemani oleh rindangnya pepohonan besar yang menghalangi panasnya sinar mentari. Sambil duduk ataupun berbaring, anginpantai yang sejuk akan menghilangkan semua kelelahan Anda</p>
+<p><Anda membawa anak-anak dan anak Anda tidak bisa diam? Jangan khawatir, di Pantai Camplongjuga tersedia aneka permainan anak, seperti perosotan, jungkat-jungkit, ayunan, dan lain-lain. Anda tidak perlu khawatir lagi dengan kerewelan si buah hati. Yang Anda lakukan hanya memantaunya dari tempat peristirahatan Anda./p>
+<p>Nah, jika sudah selesai istirahatnya, saatnya mengaktifkan otot tubuh. Di tepi pantai ada perahu yang siap mengantarkan Anda berkeliling di sekitar Pantai Camplong. Dengan hanya membayar Rp.000,- / orang, Anda sekeluarga bisa menikmati sensasi berada di atas kapal dan menikmati birunya selat Madura di Pantai Camplong. Dari laut, pemandangan di Pantai Camplong tidak kalah indah dengan pemandangan di lautan. Ombak-ombak yang berkejaran juga senantiasa mengiringi perjalanan Anda di kapal.</p>
+<p>Makanan Khas Camplong</p></b>
+<p>Sudah puas naik kapal? Sekarang waktunya untuk makan-makan. Ada banyak sekali makanan yang dijual disini. Namun ada 2 makanan khas yang rasanya tidak pas jika Anda tidak memakannya ketika ada di Pantai Camplong. Yang pertama adalah rujak cingur. Rujak Cingur sebenarnya tidak jauh berbeda dengan rujak-rujak yang lain. Perbedaannya hanya satu, yaitu pada irisan cingur yang ditambahkan pada rujak itu. Dan cingur ini juga menambah cita rasa pada rujak tersebut.</p>
+<p><Makanan yang kedua adalah Nasi Kobel. Nasi Kobel pada dasarnya adalah makanan khas yang selalu dibawa oleh para nelayan ketika berlayar. Terdiri dari nasi, dan lauk-pauk khas yang sudah menjadi tradisi. Kata sebagian orang, belum afdhol jika ke Pantai Camplong tanpa memakan Nasi Kobel. Makanan yang satu ini sangat disarankan bagi para pelancong sekaligus pecinta kuliner. Akan lebih nikmat jika disantap bersama dengan es teh atau es degan (es kelapa muda)./p>
+	
+		
+		
+	</div>
+</div>
+<div></div>
+
+	
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#main" data-icon="grid" data-transition="flip" data-prefetch class="ui-btn-active ui-state-persist">MENU UTAMA</a></li>
+				<li><a href="#maps" data-icon="home" data-transition="flip" data-prefetch>PETA LOKASI</a></li>
+			</ul>
+
+		</div>
+	</div>
+</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<div data-role="page" id="gililabek">
+
+	<div data-role="header" data-position="fixed">
+		<a href="#main" data-role="button">Back</a>
+		<h1>PANTAI GILI LABEK</h1>
+	</div>
+
+	<div class="column3">
+	<b><p><font size="5">Detail</font></p></b>
+	<br/>
+		<p><font size="3"><img src="js/images/marker-icon.png" height="20" width="13">-7.234120, 113.542706</font></p>
+		
+		<p><font size="3"><p>Desa : </font></p>
+		<p><font size="3">Kec  : </font></p>
+		<p><font size="3">Kab  : </font></p>
+		<p><font size="5">Komentar</font>
+		<textarea name ="alamat" cols="30" rows="5" ></textarea> <p></p>
+		<button>Kirim</button>
+		
+</div>
+<div class="column4">
+	<div data-role="content">
+		<h1>PANTAI GILI LABEK</h1>
+		<br/>
+		<div class="zoom">
+<img src="images/gililabak1.jpg">
+<img src="images/gililabak2.jpg">
+<img src="images/gililabak3.jpg">
+</div> 
+<p>Gili Labak Madura adalah pulau kecil yang mempunyai pasir putih, biru laut dan desiran ombak yang tenang. Ternyata yang mempunyai Gili bukan hanya Lombok, di Propinsi Jawa Timur tepatnya di Kabupaten Sumenep, Madura mempunyai beberapa Gili. Salah satunya adalah Gili Labak, pulau yang berada paling ujung timur pulau Madura dan tempat wisata di Jawa Timur ini belum banyak orang yang mengetahuinya sehingga pulau ini jarang dikunjungi oleh para wisatawan.</p>
+<p>Sedikit para wisatawan yang tahu kalo sumenep madura memiliki pulau cantik nan jelita. Nama pulau ini dulunya adalah pulau tikus. Karena dulunya tempat ini adalah sarang tikus. Karena keindahan pulau ini melebihi nama aslinya (pulau tikus), Pulau ini diganti namanya menjadi Pulau Gili Labak, yang lebih enak disebut dengan dialek bahasa madura.</p>
+<p>Pulau ini dapat ditempuh kurang lebih 2 jam dari pelabuhan kalianget, Pelabuhan paling ujung timur pulau madura. Letak Pulau ini cukup tersembunyi bahkan di atlas yang beli di toko pun tidak menampakkan pulau ini dí peta jawa timur. Luas Pulaunya yang hanya selapangan sepakbola sehingga membutuhkan skala lebih besar untuk muncul di peta.</p>
+<p>Bentangan pasir putih dan lautan biru dengan ombak yang landai menjadikan Pulau Gili ini yang sangat layak untuk dikunjungi. Mempunyai pasir putih halus serta Sekitar 50 meter sebelum berlabuh di bibir pantai akan disambut dengan beningya air laut membuat anda bisa menikmati gugusan terumbu karang yang sangat indah. Pulau Kecil ini menjadi salah satu tempat favorit bagi yang hobi snorkling ataupun diving karena Tempat Wisata Sumenep ini mempunyai titik titik terumbu karang dan biota laut yang cukup beragam. Tetapi untuk menikmati hobi snorkling tersebut disarankan untuk membawa sendiri alatnya, karena disana belum ada yang menyewakan alat tersebut.</p>
+<p>Gili Labak yang dahulu orang menyebutnya dengan Pulau Tikus mempunyai luas sekitar 5 hektar dan dapat dikelilingi dengan berjalan kaki kurang lebih 30 menit ini dihuni sekitar 35 kepala keluarga. Untuk penunjang fasilitas di Panta Gili Madura ini masih tergolong kurang. Seperti keterbatasan air bersih yang memang belum ada sumber air tawar di pulau tersebut, listrik yang hanya menyala di malam hari, belum adanya penginapan ataupun warung makanan. Jadi kalau menginginkan menginap, anda bisa menginap di rumah warga atau berkemah dipinggir pantai dan bawalah kebutuhan makanan selama berada di Gili Labak.</p>	
+	
+		
+		
+	</div>
+</div>
+<div></div>
+
+	
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#main" data-icon="grid" data-transition="flip" data-prefetch class="ui-btn-active ui-state-persist">MENU UTAMA</a></li>
+				<li><a href="#maps" data-icon="home" data-transition="flip" data-prefetch>PETA LOKASI</a></li>
+			</ul>
+
+		</div>
+	</div>
+</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<div data-role="page" id="jumiang">
+
+	<div data-role="header" data-position="fixed">
+		<a href="#main" data-role="button">Back</a>
+		<h1>PANTAI JUMIANG</h1>
+		<br/>
+	</div><!-- /header -->
+
+		<div class="column3">
+	<b><p><font size="5">Detail</font></p></b>
+	<br/>
+		<p><font size="3"><img src="js/images/marker-icon.png" height="20" width="13">-7.234120, 113.542706</font></p>
+		
+		<p><font size="3"><p>Desa : </font></p>
+		<p><font size="3">Kec  : </font></p>
+		<p><font size="3">Kab  : </font></p>
+		<p><font size="5">Komentar</font>
+		<textarea name ="alamat" cols="30" rows="5" ></textarea> <p></p>
+		<button>Kirim</button>
+		
+</div>
+<div class="column4">
+	<div data-role="content">
+		<h1>PANTAI JUMIANG </h1>
+		<br/>
+		<div class="zoom">
+<img src="images/jumiang1.jpg">
+<img src="images/jumiang2.jpg">
+<img src="images/jumiang3.jpg">
+</div> 
+<p>Pantai Jumiang ini merupakan salah satu objek wisata Pemekasan yang memiliki sejuta keindahan alam. Hamparan pasir putih yang membentang luas dan menawan seakan mengajak anda untuk bermain bersamanya. Biasanya pantai ini di kunjungi oleh para muda mudi yang ingin melepaskan kepeatan dan kelelahan setelah mereka menjalankan aktifitas yang memakan waktu, dan juga di gunakan sebagai tempat berlibur yang paling mengasikan. Pemandangannya yang sangat indah rasanya menarik anda untuk mengajak anda berfoto foto, dan masalah hasilnya tentu saja sudah tidak di ragukan lagi, sebuah bacground yang sangat indah akan menghiasi foto foto anda.
+Ada mitos yang mengatakan bahwa setiap pasangan yang mengunjungi tempat wisata Pamekasan yaitu pantai Jumiang ini hubungannya tidak akan bertahan lama, entah apa alasannya masyarakat yang berada di sekitar daerah pantai Jumiang tersebut memiliki kepercayaan seperti itu. Namun mitos tersebut nampaknya tidak di gubris oleh para pengunjung pantai Jumiang tersebut. Pantai ini menyediakan panorama pantai yang memiliki bacjground sebuah pepohonan yang rimbun, dan udaranya sangat sejuk. Anda dapat mengunjungi lokasi pantai Jumiang ini bersama keluarga anda untuk berrekreasi menikmati keindahan pantai dan keindahan alamnya, dengan harga yang sangat murah yaitu Rp. 3000 rupiah untuk setiap orangnya. Anda dapat menggunakan kendaraan pribadi anda untuk mengelilingi pantai tersebut seperti menggunakan motor, namun anda harus hati hati karena pasirnya akan memelesetkan anda.
+Ombak yang cukup besar dan berwarna putih bersih ini menjadikan salah satu daya tarik dari wisata Pamekasan ini, hal tersebut dapat di lihat dari pengunjungnya yang cukup banyak. Jika anda berniat untuk mengunjungi tempat tersebut, anda dapat mengunjunginya bersama keluarga atau kerabat anda.</p>	
+	
+		
+	</div>
+</div>
+<div></div>
+
+	
+	<div data-role="footer" data-position="fixed">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#main" data-icon="grid" data-transition="flip" data-prefetch class="ui-btn-active ui-state-persist">MENU UTAMA</a></li>
+				<li><a href="#maps" data-icon="home" data-transition="flip" data-prefetch>PETA LOKASI</a></li>
+			</ul>
+
+		</div>
+	</div>
+</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+</body>
+</html>
